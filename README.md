@@ -90,7 +90,7 @@ typedef struct {
 
 ## --- Protocollo di rete ---
 
-Il protocollo di rete utilizzato per la comunicazione tra il server e i client prevede l'apertura di un socket TCP da parte del server, che rimane in attesa di connessioni dai client. I client, a loro volta, possono stabilire due tipi di connessioni: A o 1 e B o 2.
+Il protocollo di rete utilizzato per la comunicazione tra il server e i client prevede l'apertura di un socket TCP da parte del server, che rimane in attesa di connessioni dai client. I client, a loro volta, possono stabilire due tipi di connessioni: A e B.
 Entrambi i client mandano pacchetti di bytes, il server li leggerà e li metterà in bytes nelle FIFO per comunicare con archivio. 
 
 ### Connessione di tipo A.
@@ -107,4 +107,4 @@ La connessione di tipo B server per aggiungere elementi alla tabella hash ed è 
 - La connessione viene aperta quando apre un file e viene chiusa quando ha finito con tale file.
 - Quando il client2 ha terminato l'invio dei messaggi, la connessione viene chiusa.
 
-Il server, ogni volta che viene ricevuta e chiusa una connessione viene scritto su server.log che tipo di connessione ha ricevuto (1 o 2), il numero di bytes scritti sulle FIFO, incluso i due byte per rappresentare la lunghezza della riga e il numero di bytes della lunghezza della riga stessa.
+Il server, ogni volta che viene ricevuta e chiusa una connessione viene scritto su server.log che tipo di connessione ha ricevuto, il numero di bytes scritti sulle FIFO, incluso i due byte per rappresentare la lunghezza della riga e il numero di bytes della lunghezza della riga stessa.

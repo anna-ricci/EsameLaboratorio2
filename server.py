@@ -115,7 +115,7 @@ def gestisci_connessione(conn,addr,fifo_r,fifo_w,lock):
            logging.debug(f"Error message:{str(e)}")
         # Scrivo sul file di logging quanti byte sono stati scritti nella fifo
         # quindi i due byte per la lunghezza e la lunghezza della stringa stessa.
-        logging.info(f"Tipo di connessione 1, byte trasmessi = {leng+2}")
+        logging.info(f"Tipo di connessione A, byte byte scritti in capolet = {leng+2}")
     else:
        # Se è di tipo 2, manda una sequenza di stringhe che scriverà nella
        # FIFO caposc, uscirà dal while solo quando manderò una stringa di leng==0
@@ -126,7 +126,7 @@ def gestisci_connessione(conn,addr,fifo_r,fifo_w,lock):
         assert(leng<= 2048)
         if leng == 0:
             try:
-              logging.info(f"Tipo di connessione 2, byte scritti in caposc= {b}")
+              logging.info(f"Tipo di connessione B, byte scritti in caposc = {b}")
             except Exception as e:
               logging.debug(f"Generic error occured: {type(e).__name__}")
               logging.debug(f"Error message:{str(e)}")
