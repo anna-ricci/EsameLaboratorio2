@@ -4,11 +4,11 @@ L'obiettivo è sviluppare un server in Python per gestire due diverse tipologie 
 
 I client comunicano con il server per interagire con una tabella hash specifica presente nell'archivio. 
 
-Per comunicare tra server e archivio vengono usate due FIFO: caposc e capolet, rispettivamente per il thread produttore scrittore e per il thread produttore lettore. Il server riceverà e invierà informazioni in bytes. In seguito i produttori comunicheranno con i thread consumatori scrittori o lettori attraverso un buffer circolare di lunghezza fissata.
+Per comunicare tra server e archivio vengono usate due FIFO: caposc e capolet, rispettivamente per il thread produttore scrittore e per il thread produttore lettore. Il server riceverà e invierà informazioni in bytes. In seguito i produttori comunicheranno con i thread consumatori scrittori o lettori attraverso un buffer circolare di lunghezza fissata. Tutte le connessioni al server vengono registrate nel file "server.log". 
 
-Le operazioni consento di aggiungere elementi alla tabella o leggere il numero di occorrenze degli elementi già presenti. Le informazioni di lettura vengono scritte in append nel file "lettori.log".
+Le operazioni consentono di aggiungere elementi alla tabella o leggere il numero di occorrenze degli elementi già presenti. Le informazioni di lettura vengono scritte in append nel file "lettori.log".
 
-Tutte le connessioni al server vengono registrate nel file "server.log". L'archivio è in grado di gestire i segnali SIGINT e SIGTERM. Alla ricezione del segnale SIGINT, il programma scrive su STDERR il numero di righe distinte salvate nella tabella hash e continua l'esecuzione senza terminare. Quando viene ricevuto il segnale SIGTERM, il programma scrive il numero di righe distinte salvate nella tabella hash su STDOUT e termina l'esecuzione in modo pulito.
+L'archivio è in grado di gestire i segnali SIGINT e SIGTERM. Alla ricezione del segnale SIGINT, il programma scrive su STDERR il numero di righe distinte salvate nella tabella hash e continua l'esecuzione senza terminare. Quando viene ricevuto il segnale SIGTERM, il programma scrive il numero di righe distinte salvate nella tabella hash su STDOUT e termina l'esecuzione in modo pulito.
 
 Il server gestisce anche la ricezione del segnale SIGINT. In tal caso, gestisce l'eccezione e invia un segnale SIGTERM all'archivio per terminarlo correttamente. Se abilitata, al termine dell'esecuzione verrà anche generato un file di log contenente l'output del tool Valgrind.
 
@@ -16,6 +16,7 @@ Il server gestisce anche la ricezione del segnale SIGINT. In tal caso, gestisce 
 
 Il progetto deve essere eseguito esclusivamente su ambiente Linux, poiché alcune funzionalità non sono supportate su macOS o Windows.
 Per installare il progetto si segua questi comandi:
+
 ```shell
 git clone git@github.com:bobogoesbrr/EsameLaboratorio2.git test
 cd test
@@ -23,15 +24,15 @@ cd test
 
 Il server ha i seguenti parametri:
 - `nthreads` è l'unico parametro obligatorio per il server.py, rappresenta il numero di thread che il server può utilizzare per gestire le connessioni.
-- `-w` è un parametro facoltativo che rappresenta il numero di thread scrittori, cioè il numero di thread consumatori-scrittori, che verranno usati da archivio per scrivere nella tabella hash. Se mandato viene richiesto che sia un 'positive_int', questo tipo che ho definito in server.py si assicura che non venga mandato un numero negativo come parametro, se questo non viene rispettato verà dato errore. Se non viene mandato alcun numero allora di default avrà valore 3. In archivio verrà letto e assegnato a `tw` .
-- `-r` parametro facoltativo che rappresenta il numero di thread lettori, cioè il numero di thread consumatori-lettori, che verranno usati da archivio per leggere le informazioni dalla tabella hash. Anche questo deve essere di tipo 'positive_int'. Se non viene mandato alcun numero allora di default avrà valore 3. In archivio verrà letto e assegnato a `tr`.
-- `-v` parametro facoltativo che se presente porterà all'esecuzione di archivio con verilog, di conseguenza verrà creato un file verilog che controlla l'uso della memoria.
+- `-w` è un parametro facoltativo che rappresenta il numero di thread scrittori, cioè il numero di thread consumatori-scrittori, che verranno usati da archivio per scrivere nella tabella hash. Se mandato viene richiesto che sia un `positive_int`, questo tipo che ho definito in server.py si assicura che non venga mandato un numero negativo come parametro, se questo non viene rispettato verrà dato errore. Se non viene mandato alcun numero allora di default avrà valore 3. In archivio verrà letto e assegnato a `tw` .
+- `-r` parametro facoltativo che rappresenta il numero di thread lettori, cioè il numero di thread consumatori-lettori, che verranno usati da archivio per leggere le informazioni dalla tabella hash. Anche questo deve essere di tipo `positive_int`. Se non viene mandato alcun numero allora di default avrà valore 3. In archivio verrà letto e assegnato a `tr`.
+- `-v` parametro facoltativo che se presente porterà all'esecuzione di archivio con valgrind, di conseguenza verrà creato un file valgrind che riporterà l'uso della memoria.
 
 Il client1 presenta:
 - `filename` è l'argomento unico e necessario per usare client1. Deve essere il nome di un file presente nella directory e ogni sua linea verrà mandata a server.py.
 
 Il client2 presenta:
-- `filenames` gli argomenti per il client2, uno è necessario ma è capace di leggerne di più. Ogni file verrà letto e mandato a server.py.
+- `filenames` gli argomenti per il client2, uno è necessario ma è capace di leggerne di più. Ogni file deve essere presente nella directory e verrà letto e mandato a server.py.
 
 L' archivio presenta:
 - `tw` sarà il numero mandato a server `-w`, di default sarà 3.
