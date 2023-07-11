@@ -108,4 +108,4 @@ La connessione di tipo B server per aggiungere elementi alla tabella hash ed è 
 - La connessione viene aperta quando apre un file e viene chiusa quando ha finito con tale file.
 - Quando il client2 ha terminato l'invio dei messaggi, la connessione viene chiusa.
 
-Il server, ogni volta che viene ricevuta e chiusa una connessione viene scritto su server.log che tipo di connessione ha ricevuto, il numero di bytes scritti sulle FIFO, incluso i due byte per rappresentare la lunghezza della riga e il numero di bytes della lunghezza della riga stessa.
+Il server, ogni volta che viene ricevuta e chiusa una connessione viene scritto su server.log che tipo di connessione ha ricevuto e il numero di bytes scritti sulle FIFO, incluso i due byte per rappresentare la lunghezza della riga e il numero di bytes della lunghezza della riga stessa.
