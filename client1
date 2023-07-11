@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+import struct,socket,argparse,concurrent.futures
+
+HOST = "127.0.0.1" 
+PORT = 50621
+
+def main():
+  parser = argparse.ArgumentParser( description="Client Tipo A", formatter_class=argparse.RawTextHelpFormatter)
+  parser.add_argument('file', help='nomefile', type = str)
+  args = parser.parse_args()
+  filename= args.file
+  
+  # Apro il file, per ogni linea, impacchetto la linea, verifico che la lunghezza non superi 2048 bytes.
+  with open(filename, "r") as f: 
+    for line in f:
+        data = line.encode()
+        lunghezza = len(data) 
+        assert lunghezza<=2048
+        lung = struct.pack("!H", lunghezza)
+
+        # Inizializzazione socket client. 
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((HOST, PORT))
+            # Pronto per inviare la richiesta.
+            s.sendall(struct.pack("!?", True)) # Invio il byte che dice che tipo di client è.
+            s.sendall(lung) # Invio il numeri dei bytes della sequenza che sto per mandare.
+            s.sendall(data) # Invio la sequenza.
+            s.shutdown(socket.SHUT_RDWR)
+
+if __name__ == "__main__":
+    main()

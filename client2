@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+import struct,socket,argparse,concurrent.futures
+
+HOST = "127.0.0.1" 
+PORT = 50621
+
+def main():
+  # Parsing degli argomenti da linea di comando.
+  parser = argparse.ArgumentParser(description="Client Tipo B", formatter_class=argparse.RawTextHelpFormatter)
+  parser.add_argument( "filenames", type=str, nargs="+", help="Nomi dei file da inviare" )
+  args = parser.parse_args()
+  
+  # Creazione threads.
+  with concurrent.futures.ThreadPoolExecutor() as executor:
+    executor.map(connessione_file, args.filenames)
+
+
+# Gestisci una singola connessione.
+def connessione_file(filename): 
+  with open(filename, "r") as f: 
+    # Inizializzazione socket client. 
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+      s.connect((HOST, PORT))
+      s.sendall(struct.pack("!?", False)) # Invio il byte che dice che tipo di client è
+
+      for line in f:
+        data = line.encode()
+        lunghezza = len(data) 
+        assert lunghezza<=2048
+        lung = struct.pack("!H", lunghezza)
+
+        s.sendall(lung) # Invio il numeri dei bytes della sequenza che sto per mandare.
+        s.sendall(data) # Invio la sequenza.
+
+      p = b''
+      fine= struct.pack("!H",len(p)); 
+      s.sendall(fine)
+      s.shutdown(socket.SHUT_RDWR)
+
+if __name__ == "__main__":
+    main()
